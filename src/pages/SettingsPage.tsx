@@ -5,7 +5,7 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { useApiData } from '@/hooks/useApiData';
 import { useReminders } from '@/hooks/useReminders';
 import { useLanguage, Language } from '@/hooks/useLanguage';
-import { useApiAuth } from '@/hooks/useApiAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 
 interface SettingItemProps {
@@ -53,7 +53,7 @@ export default function SettingsPage() {
   const { workers } = useApiData();
   const { settings: reminderSettings, enableReminders, disableReminders, setReminderTime, showNotification } = useReminders();
   const { language, setLanguage, t, languageNames, languageNamesNative, availableLanguages } = useLanguage();
-  const { user, logout, isOwner } = useApiAuth();
+  const { user, logout, isOwner } = useAuth();
   const [showTimeSelector, setShowTimeSelector] = useState(false);
   const [showLanguageSelector, setShowLanguageSelector] = useState(false);
 
