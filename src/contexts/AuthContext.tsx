@@ -100,6 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     setAuthToken(null);
     setUser(null);
+    localStorage.removeItem('kaam-hisab-api-user');
   }, []);
 
   const isLoggedIn = !!user;
