@@ -124,7 +124,8 @@ export default function AuthPage() {
     }
   };
 
-  if (isLoading) {
+  // Only show loading if checking auth AND already past splash/onboarding
+  if (isLoading && mode === 'auth') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/10">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
