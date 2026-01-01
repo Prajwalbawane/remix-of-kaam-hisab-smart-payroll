@@ -6,6 +6,7 @@ import { useApiData } from '@/hooks/useApiData';
 import { useReminders } from '@/hooks/useReminders';
 import { useLanguage, Language } from '@/hooks/useLanguage';
 import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
 interface SettingItemProps {
@@ -54,11 +55,16 @@ export default function SettingsPage() {
   const { settings: reminderSettings, enableReminders, disableReminders, setReminderTime, showNotification } = useReminders();
   const { language, setLanguage, t, languageNames, languageNamesNative, availableLanguages } = useLanguage();
   const { user, logout, isOwner } = useAuth();
+  const { toast } = useToast();
   const [showTimeSelector, setShowTimeSelector] = useState(false);
   const [showLanguageSelector, setShowLanguageSelector] = useState(false);
 
   const handleLogout = () => {
     logout();
+    toast({
+      title: "Signed out successfully",
+      description: "You have been logged out of your account.",
+    });
     navigate('/auth');
   };
 
