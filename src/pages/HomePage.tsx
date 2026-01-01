@@ -22,8 +22,15 @@ export default function HomePage() {
     );
   }
 
-  const locale = language === 'hi' ? 'hi-IN' : 'en-IN';
-  const today = new Date().toLocaleDateString(locale, {
+  const getLocale = () => {
+    switch (language) {
+      case 'hi': return 'hi-IN';
+      case 'mr': return 'mr-IN';
+      default: return 'en-IN';
+    }
+  };
+
+  const today = new Date().toLocaleDateString(getLocale(), {
     weekday: 'long',
     day: 'numeric',
     month: 'short',

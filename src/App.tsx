@@ -13,6 +13,7 @@ import ScanPage from "./pages/ScanPage";
 import ReportsPage from "./pages/ReportsPage";
 import SettingsPage from "./pages/SettingsPage";
 import AttendancePage from "./pages/AttendancePage";
+import PaymentsPage from "./pages/PaymentsPage";
 import AuthPage from "./pages/AuthPage";
 import WorkerDashboard from "./pages/WorkerDashboard";
 import NotFound from "./pages/NotFound";
@@ -78,6 +79,7 @@ function AppRoutes() {
       <Route path="/workers" element={<ProtectedRoute ownerOnly><AppLayout><WorkersPage /></AppLayout></ProtectedRoute>} />
       <Route path="/worker/:id" element={<ProtectedRoute ownerOnly><AppLayout><WorkerDetailPage /></AppLayout></ProtectedRoute>} />
       <Route path="/attendance" element={<ProtectedRoute ownerOnly><AppLayout><AttendancePage /></AppLayout></ProtectedRoute>} />
+      <Route path="/payments" element={<ProtectedRoute ownerOnly><AppLayout><PaymentsPage /></AppLayout></ProtectedRoute>} />
       <Route path="/reports" element={<ProtectedRoute ownerOnly><AppLayout><ReportsPage /></AppLayout></ProtectedRoute>} />
       
       {/* Shared routes */}

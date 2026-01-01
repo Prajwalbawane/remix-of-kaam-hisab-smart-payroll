@@ -1,5 +1,6 @@
 import { Check, Clock, X } from 'lucide-react';
 import { AttendanceRecord } from '@/types';
+import { useLanguage } from '@/hooks/useLanguage';
 import { cn } from '@/lib/utils';
 
 interface AttendanceActionsProps {
@@ -7,34 +8,33 @@ interface AttendanceActionsProps {
   onMark: (status: AttendanceRecord['status']) => void;
 }
 
-const actions = [
-  { 
-    status: 'present' as const, 
-    label: 'हजर', 
-    labelEn: 'Present',
-    icon: Check,
-    color: 'bg-success text-success-foreground hover:bg-success/90',
-    inactiveColor: 'bg-success/10 text-success border-success/30',
-  },
-  { 
-    status: 'half-day' as const, 
-    label: 'अर्धा', 
-    labelEn: 'Half',
-    icon: Clock,
-    color: 'bg-warning text-warning-foreground hover:bg-warning/90',
-    inactiveColor: 'bg-warning/10 text-warning border-warning/30',
-  },
-  { 
-    status: 'absent' as const, 
-    label: 'गैरहजर', 
-    labelEn: 'Absent',
-    icon: X,
-    color: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-    inactiveColor: 'bg-destructive/10 text-destructive border-destructive/30',
-  },
-];
-
 export function AttendanceActions({ currentStatus, onMark }: AttendanceActionsProps) {
+  const { t } = useLanguage();
+
+  const actions = [
+    { 
+      status: 'present' as const, 
+      label: t('markPresent'),
+      icon: Check,
+      color: 'bg-success text-success-foreground hover:bg-success/90',
+      inactiveColor: 'bg-success/10 text-success border-success/30',
+    },
+    { 
+      status: 'half-day' as const, 
+      label: t('markHalfDay'),
+      icon: Clock,
+      color: 'bg-warning text-warning-foreground hover:bg-warning/90',
+      inactiveColor: 'bg-warning/10 text-warning border-warning/30',
+    },
+    { 
+      status: 'absent' as const, 
+      label: t('markAbsent'),
+      icon: X,
+      color: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+      inactiveColor: 'bg-destructive/10 text-destructive border-destructive/30',
+    },
+  ];
+
   return (
     <div className="flex gap-2">
       {actions.map((action) => {
