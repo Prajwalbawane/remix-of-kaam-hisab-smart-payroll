@@ -96,6 +96,16 @@ const translations = {
     showToWorkers: 'Show this QR code to workers for attendance',
     downloadQR: 'Download QR',
     
+    // QR Scanner
+    cameraReady: 'Camera ready',
+    scanAttendance: 'Scan Attendance',
+    scanOwnerQR: "Scan owner's QR code",
+    scanWindow: 'Scan window: 7 AM - 11 AM',
+    stopScanning: 'Stop Scanning',
+    cameraAccessNeeded: 'Camera Access Needed',
+    allowCameraAccess: 'Please allow camera access to scan QR codes',
+    requestCameraPermission: 'Request Camera Permission',
+    
     // Reports
     summary: 'Summary',
     workerWise: 'Worker-wise',
@@ -283,6 +293,16 @@ const translations = {
     showToWorkers: 'यह QR कोड कामगारों को हाज़िरी के लिए दिखाएं',
     downloadQR: 'QR डाउनलोड करें',
     
+    // QR Scanner
+    cameraReady: 'कैमरा तैयार है',
+    scanAttendance: 'हाज़िरी स्कैन करें',
+    scanOwnerQR: 'मालिक का QR कोड स्कैन करें',
+    scanWindow: 'स्कैन समय: सुबह 7 - 11 बजे',
+    stopScanning: 'स्कैन बंद करें',
+    cameraAccessNeeded: 'कैमरा एक्सेस चाहिए',
+    allowCameraAccess: 'QR कोड स्कैन करने के लिए कैमरा एक्सेस दें',
+    requestCameraPermission: 'कैमरा परमिशन दें',
+    
     // Reports
     summary: 'सारांश',
     workerWise: 'कामगार-वार',
@@ -469,6 +489,16 @@ const translations = {
     validUntil: 'वैध वेळेपर्यंत',
     showToWorkers: 'हा QR कोड कामगारांना हजेरीसाठी दाखवा',
     downloadQR: 'QR डाउनलोड करा',
+    
+    // QR Scanner
+    cameraReady: 'कॅमेरा तयार आहे',
+    scanAttendance: 'हजेरी स्कॅन करा',
+    scanOwnerQR: 'मालकाचा QR कोड स्कॅन करा',
+    scanWindow: 'स्कॅन वेळ: सकाळी ७ - ११ वाजता',
+    stopScanning: 'स्कॅन बंद करा',
+    cameraAccessNeeded: 'कॅमेरा ॲक्सेस आवश्यक',
+    allowCameraAccess: 'QR कोड स्कॅन करण्यासाठी कॅमेरा ॲक्सेस द्या',
+    requestCameraPermission: 'कॅमेरा परवानगी द्या',
     
     // Reports
     summary: 'सारांश',
