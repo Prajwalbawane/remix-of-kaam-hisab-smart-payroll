@@ -39,8 +39,10 @@ const initDB = async () => {
         owner_id INTEGER NOT NULL REFERENCES users(id),
         name TEXT NOT NULL,
         phone TEXT,
+        work_type TEXT DEFAULT 'other',
         daily_rate DECIMAL NOT NULL DEFAULT 500,
         photo TEXT,
+        qr_id TEXT,
         is_active INTEGER DEFAULT 1,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
@@ -211,15 +213,17 @@ app.get('/api/workers', authenticateToken, async (req, res) => {
 // Add worker
 app.post('/api/workers', authenticateToken, async (req, res) => {
   try {
-    const { name, phone, daily_rate, photo } = req.body;
+    const { name, phone, daily_rate, work_type, photo } = req.body;
 
     if (!name) {
       return res.status(400).json({ error: 'Worker name is required' });
     }
 
+    const qrId = `WKR-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+
     const result = await pool.query(
-      'INSERT INTO workers (owner_id, name, phone, daily_rate, photo) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      [req.user.id, name, phone || null, daily_rate || 500, photo || null]
+      'INSERT INTO workers (owner_id, name, phone, work_type, daily_rate, photo, qr_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+      [req.user.id, name, phone || null, work_type || 'other', daily_rate || 500, photo || null, qrId]
     );
 
     res.status(201).json({ worker: result.rows[0] });
@@ -255,18 +259,19 @@ app.get('/api/workers/:id', authenticateToken, async (req, res) => {
 // Update worker
 app.put('/api/workers/:id', authenticateToken, async (req, res) => {
   try {
-    const { name, phone, daily_rate, photo, is_active } = req.body;
+    const { name, phone, daily_rate, work_type, photo, is_active } = req.body;
 
     const result = await pool.query(`
       UPDATE workers 
       SET name = COALESCE($1, name),
           phone = COALESCE($2, phone),
           daily_rate = COALESCE($3, daily_rate),
-          photo = COALESCE($4, photo),
-          is_active = COALESCE($5, is_active)
-      WHERE id = $6 AND owner_id = $7
+          work_type = COALESCE($4, work_type),
+          photo = COALESCE($5, photo),
+          is_active = COALESCE($6, is_active)
+      WHERE id = $7 AND owner_id = $8
       RETURNING *
-    `, [name, phone, daily_rate, photo, is_active, req.params.id, req.user.id]);
+    `, [name, phone, daily_rate, work_type, photo, is_active, req.params.id, req.user.id]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Worker not found' });
@@ -420,8 +425,10 @@ app.post('/api/payments', authenticateToken, async (req, res) => {
   try {
     const { worker_id, amount, type, date, notes } = req.body;
 
-    if (!worker_id || !amount || !type || !date) {
-      return res.status(400).json({ error: 'Worker ID, amount, type, and date are required' });
+    const paymentDate = date || new Date().toISOString().split('T')[0];
+
+    if (!worker_id || !amount || !type) {
+      return res.status(400).json({ error: 'Worker ID, amount, and type are required' });
     }
 
     // Verify worker belongs to owner
@@ -432,13 +439,69 @@ app.post('/api/payments', authenticateToken, async (req, res) => {
 
     const result = await pool.query(
       'INSERT INTO payments (worker_id, amount, type, date, notes) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      [worker_id, amount, type, date, notes || null]
+      [worker_id, amount, type, paymentDate, notes || null]
     );
 
     res.status(201).json({ payment: result.rows[0] });
   } catch (error) {
     console.error('Add payment error:', error);
     res.status(500).json({ error: 'Failed to add payment' });
+  }
+});
+
+// Update payment
+app.put('/api/payments/:id', authenticateToken, async (req, res) => {
+  try {
+    const { amount, type, date, notes } = req.body;
+
+    // Verify payment belongs to owner's worker
+    const paymentCheck = await pool.query(`
+      SELECT p.id FROM payments p
+      JOIN workers w ON p.worker_id = w.id
+      WHERE p.id = $1 AND w.owner_id = $2
+    `, [req.params.id, req.user.id]);
+
+    if (paymentCheck.rows.length === 0) {
+      return res.status(404).json({ error: 'Payment not found' });
+    }
+
+    const result = await pool.query(`
+      UPDATE payments 
+      SET amount = COALESCE($1, amount),
+          type = COALESCE($2, type),
+          date = COALESCE($3, date),
+          notes = COALESCE($4, notes)
+      WHERE id = $5
+      RETURNING *
+    `, [amount, type, date, notes, req.params.id]);
+
+    res.json({ payment: result.rows[0] });
+  } catch (error) {
+    console.error('Update payment error:', error);
+    res.status(500).json({ error: 'Failed to update payment' });
+  }
+});
+
+// Delete payment
+app.delete('/api/payments/:id', authenticateToken, async (req, res) => {
+  try {
+    // Verify payment belongs to owner's worker
+    const paymentCheck = await pool.query(`
+      SELECT p.id FROM payments p
+      JOIN workers w ON p.worker_id = w.id
+      WHERE p.id = $1 AND w.owner_id = $2
+    `, [req.params.id, req.user.id]);
+
+    if (paymentCheck.rows.length === 0) {
+      return res.status(404).json({ error: 'Payment not found' });
+    }
+
+    await pool.query('DELETE FROM payments WHERE id = $1', [req.params.id]);
+
+    res.json({ message: 'Payment deleted successfully' });
+  } catch (error) {
+    console.error('Delete payment error:', error);
+    res.status(500).json({ error: 'Failed to delete payment' });
   }
 });
 
