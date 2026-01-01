@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { ConnectionStatus } from "@/components/ConnectionStatus";
 import { useApiAuth } from "@/hooks/useApiAuth";
 import Index from "./pages/Index";
 import WorkersPage from "./pages/WorkersPage";
@@ -95,6 +96,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AppRoutes />
+        <ConnectionStatus />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
