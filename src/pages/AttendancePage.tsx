@@ -3,10 +3,12 @@ import { Calendar, Check, CheckCircle, Loader2 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { AttendanceActions } from '@/components/attendance/AttendanceActions';
 import { useApiData } from '@/hooks/useApiData';
+import { useLanguage } from '@/hooks/useLanguage';
 import { cn } from '@/lib/utils';
 
 export default function AttendancePage() {
   const { workers, attendance, markAttendance, isLoading } = useApiData();
+  const { t, language } = useLanguage();
   const today = new Date().toISOString().split('T')[0];
 
   const getTodayAttendance = (workerId: string) => {
@@ -26,8 +28,8 @@ export default function AttendancePage() {
   return (
     <div className="min-h-screen">
       <PageHeader 
-        title="आजची हजेरी" 
-        subtitle={`${markedCount}/${workers.length} marked`}
+        title={t('markAttendance')} 
+        subtitle={`${markedCount}/${workers.length} ${t('days')}`}
         showBack
       />
 
@@ -37,8 +39,8 @@ export default function AttendancePage() {
           <div className="flex items-center gap-3">
             <CheckCircle className="w-8 h-8 text-success" />
             <div>
-              <p className="font-semibold text-foreground">{markedCount} of {workers.length}</p>
-              <p className="text-xs text-muted-foreground">Attendance marked</p>
+              <p className="font-semibold text-foreground">{markedCount} / {workers.length}</p>
+              <p className="text-xs text-muted-foreground">{t('attendance')}</p>
             </div>
           </div>
           <div className="text-right">
@@ -52,9 +54,9 @@ export default function AttendancePage() {
         {workers.length === 0 ? (
           <div className="p-12 text-center">
             <Calendar className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-            <p className="text-foreground font-medium mb-1">No workers added</p>
+            <p className="text-foreground font-medium mb-1">{t('noWorkersYet')}</p>
             <p className="text-sm text-muted-foreground">
-              Add workers first to mark attendance
+              {t('addWorker')}
             </p>
           </div>
         ) : (
@@ -87,7 +89,7 @@ export default function AttendancePage() {
                       <div>
                         <p className="font-medium text-foreground">{worker.name}</p>
                         <p className="text-xs text-muted-foreground">
-                          ₹{worker.dailyRate}/day
+                          ₹{worker.dailyRate}/{t('day')}
                         </p>
                       </div>
                     </div>
@@ -98,8 +100,8 @@ export default function AttendancePage() {
                         todayRecord.status === 'half-day' && "bg-warning/10 text-warning",
                         todayRecord.status === 'absent' && "bg-destructive/10 text-destructive"
                       )}>
-                        {todayRecord.status === 'present' ? 'हजर' : 
-                         todayRecord.status === 'half-day' ? 'अर्धा' : 'गैरहजर'}
+                        {todayRecord.status === 'present' ? t('present') : 
+                         todayRecord.status === 'half-day' ? t('halfDay') : t('absent')}
                       </span>
                     )}
                   </div>
