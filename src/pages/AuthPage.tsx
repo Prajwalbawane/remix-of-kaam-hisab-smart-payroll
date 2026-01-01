@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useApiAuth } from '@/hooks/useApiAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,7 +18,7 @@ export default function AuthPage() {
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const { login, register, isLoading } = useApiAuth();
+  const { login, register, isLoading } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async () => {

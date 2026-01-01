@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { ConnectionStatus } from "@/components/ConnectionStatus";
-import { useApiAuth } from "@/hooks/useApiAuth";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import WorkersPage from "./pages/WorkersPage";
 import WorkerDetailPage from "./pages/WorkerDetailPage";
@@ -22,7 +22,7 @@ const queryClient = new QueryClient();
 
 // Protected route wrapper
 function ProtectedRoute({ children, ownerOnly = false }: { children: React.ReactNode; ownerOnly?: boolean }) {
-  const { isLoggedIn, isOwner, isLoading } = useApiAuth();
+  const { isLoggedIn, isOwner, isLoading } = useAuth();
   
   if (isLoading) {
     return (
@@ -45,7 +45,7 @@ function ProtectedRoute({ children, ownerOnly = false }: { children: React.React
 
 // Main app router
 function AppRoutes() {
-  const { isLoggedIn, isOwner, isWorker, isLoading } = useApiAuth();
+  const { isLoggedIn, isWorker, isLoading } = useAuth();
 
   if (isLoading) {
     return (
@@ -95,8 +95,10 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AppRoutes />
-        <ConnectionStatus />
+        <AuthProvider>
+          <AppRoutes />
+          <ConnectionStatus />
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
