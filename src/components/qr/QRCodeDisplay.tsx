@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { QrCode, RefreshCw, Clock, Download } from 'lucide-react';
 import { DailyQRCode } from '@/types';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/hooks/useLanguage';
 import QRCode from 'qrcode';
 
 interface QRCodeDisplayProps {
@@ -14,6 +15,7 @@ export function QRCodeDisplay({ qrCode, onGenerate, isValid }: QRCodeDisplayProp
   const [timeLeft, setTimeLeft] = useState('');
   const [qrImageUrl, setQrImageUrl] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { language, t } = useLanguage();
 
   useEffect(() => {
     if (!qrCode) return;
@@ -74,7 +76,16 @@ export function QRCodeDisplay({ qrCode, onGenerate, isValid }: QRCodeDisplayProp
     link.click();
   };
 
-  const today = new Date().toLocaleDateString('mr-IN', {
+  // Get locale based on selected language
+  const getLocale = () => {
+    switch (language) {
+      case 'hi': return 'hi-IN';
+      case 'mr': return 'mr-IN';
+      default: return 'en-US';
+    }
+  };
+
+  const today = new Date().toLocaleDateString(getLocale(), {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -112,7 +123,7 @@ export function QRCodeDisplay({ qrCode, onGenerate, isValid }: QRCodeDisplayProp
           <div className="w-48 h-48 bg-muted rounded-lg flex flex-col items-center justify-center gap-3">
             <QrCode className="w-16 h-16 text-muted-foreground" />
             <p className="text-sm text-muted-foreground text-center">
-              आजचा QR code<br />तयार करा
+              {t('createTodayQR')}
             </p>
           </div>
         )}
@@ -130,7 +141,7 @@ export function QRCodeDisplay({ qrCode, onGenerate, isValid }: QRCodeDisplayProp
           )}
         >
           <RefreshCw className="w-4 h-4" />
-          {isValid ? 'नवीन QR बनवा' : 'आजचा QR बनवा'}
+          {isValid ? t('generateNewQR') : t('generateTodayQR')}
         </button>
 
         {isValid && qrImageUrl && (
@@ -147,10 +158,10 @@ export function QRCodeDisplay({ qrCode, onGenerate, isValid }: QRCodeDisplayProp
       {/* Instructions */}
       <div className="mt-6 text-center space-y-1">
         <p className="text-xs text-muted-foreground">
-          कामगारांना हा QR स्कॅन करायला सांगा
+          {t('askWorkersToScan')}
         </p>
         <p className="text-xs text-muted-foreground">
-          Valid: 7 AM - 11 AM
+          {t('validTime')}
         </p>
         {qrCode && isValid && (
           <p className="text-[10px] text-muted-foreground mt-2 font-mono">
