@@ -42,7 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [user]);
 
-  // Check if user is logged in on mount
+  // Check if user is logged in on mount with timeout
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -52,10 +52,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return;
         }
 
-        const response = await authApi.me();
+        // Add timeout to prevent hanging when backend is offline
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Timeout')), 3000)
+        );
+
+        const response = await Promise.race([
+          authApi.me(),
+          timeoutPromise
+        ]) as { user: ApiUser };
+        
         setUser(response.user);
       } catch (err) {
-        // Token invalid or expired
+        // Token invalid, expired, or backend offline
         setAuthToken(null);
         setUser(null);
       } finally {
