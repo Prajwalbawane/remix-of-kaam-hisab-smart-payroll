@@ -114,10 +114,21 @@ export const paymentsApi = {
     return apiRequest<any[]>(`/payments${query ? `?${query}` : ''}`);
   },
   
-  create: (data: { worker_id: string; amount: number; type: 'payment' | 'advance'; note?: string }) =>
+  create: (data: { worker_id: string; amount: number; type: 'payment' | 'advance'; note?: string; date?: string }) =>
     apiRequest<any>('/payments', {
       method: 'POST',
       body: JSON.stringify(data),
+    }),
+
+  update: (id: string, data: Partial<{ amount: number; type: 'payment' | 'advance'; note?: string; date?: string }>) =>
+    apiRequest<any>(`/payments/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  delete: (id: string) =>
+    apiRequest<{ message: string }>(`/payments/${id}`, {
+      method: 'DELETE',
     }),
 };
 
