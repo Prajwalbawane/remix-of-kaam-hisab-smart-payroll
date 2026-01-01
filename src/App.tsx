@@ -21,7 +21,7 @@ import { Loader2 } from "lucide-react";
 
 const queryClient = new QueryClient();
 
-// Protected route wrapper
+// Protected route wrapper - must be inside AuthProvider
 function ProtectedRoute({ children, ownerOnly = false }: { children: React.ReactNode; ownerOnly?: boolean }) {
   const { isLoggedIn, isOwner, isLoading } = useAuth();
   
@@ -44,7 +44,7 @@ function ProtectedRoute({ children, ownerOnly = false }: { children: React.React
   return <>{children}</>;
 }
 
-// Main app router
+// Main app router - must be inside AuthProvider
 function AppRoutes() {
   const { isLoggedIn, isWorker, isLoading } = useAuth();
 
@@ -91,6 +91,16 @@ function AppRoutes() {
   );
 }
 
+// App content that requires AuthProvider
+function AppContent() {
+  return (
+    <>
+      <AppRoutes />
+      <ConnectionStatus />
+    </>
+  );
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -98,8 +108,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <AppRoutes />
-          <ConnectionStatus />
+          <AppContent />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
