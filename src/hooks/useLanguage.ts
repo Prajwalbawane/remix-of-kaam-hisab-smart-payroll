@@ -87,6 +87,11 @@ const translations = {
     
     // QR Display
     generateQR: 'Generate QR',
+    generateTodayQR: "Generate today's QR",
+    generateNewQR: 'Generate new QR',
+    createTodayQR: "Create today's QR code",
+    askWorkersToScan: 'Ask workers to scan this QR',
+    validTime: 'Valid: 7 AM - 11 AM',
     validUntil: 'Valid until',
     showToWorkers: 'Show this QR code to workers for attendance',
     downloadQR: 'Download QR',
@@ -269,6 +274,11 @@ const translations = {
     
     // QR Display
     generateQR: 'QR बनाएं',
+    generateTodayQR: 'आज का QR बनाएं',
+    generateNewQR: 'नया QR बनाएं',
+    createTodayQR: 'आज का QR कोड बनाएं',
+    askWorkersToScan: 'कामगारों को यह QR स्कैन करने को कहें',
+    validTime: 'वैध: सुबह 7 - 11 बजे',
     validUntil: 'वैध समय तक',
     showToWorkers: 'यह QR कोड कामगारों को हाज़िरी के लिए दिखाएं',
     downloadQR: 'QR डाउनलोड करें',
@@ -451,6 +461,11 @@ const translations = {
     
     // QR Display
     generateQR: 'QR बनवा',
+    generateTodayQR: 'आजचा QR बनवा',
+    generateNewQR: 'नवीन QR बनवा',
+    createTodayQR: 'आजचा QR कोड तयार करा',
+    askWorkersToScan: 'कामगारांना हा QR स्कॅन करायला सांगा',
+    validTime: 'वैध: सकाळी ७ - ११ वाजता',
     validUntil: 'वैध वेळेपर्यंत',
     showToWorkers: 'हा QR कोड कामगारांना हजेरीसाठी दाखवा',
     downloadQR: 'QR डाउनलोड करा',
